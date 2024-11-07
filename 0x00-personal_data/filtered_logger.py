@@ -9,6 +9,9 @@ def filter_datum(fields, redaction, message, separator):
         parts = [re.sub(f"{field}=[^;]*", f"{field}={redaction}", part) for part in parts]
     return separator.join(parts)
 
+def get_logger():
+
+
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
     """
