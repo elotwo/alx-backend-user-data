@@ -35,10 +35,22 @@ class DB:
         new_user = User(
                 email='email',
                 hashed_password='hashed_password',
-                session_id="",
-                reset_token="",
+                session_id='None',
+                reset_token='None',
                 )
         self._session.add(new_user)
         self._session.commit()
         return new_user
-    def DB.find_user_by(self,
+    def find_user_by(self, **kwargs) ->User:
+        if not kwargs:
+            raise ValueError("no keyword argumnet")
+        try:
+            query = self._session.query(User).filter_by(**kwargs)
+            user = query.first()
+            if user is None:
+                raise sqlalchemy.orm.exc.NoResultFound("invalid")
+            return user
+        except InvalidRequestError as e:
+            raise InvalidRequestError(f"Invalid query arguments: {e}")
+
+
