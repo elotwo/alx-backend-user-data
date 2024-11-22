@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -32,6 +34,9 @@ class DB:
         return self.__session
 
     def add_user(self, email, hashed_password) ->User:
+        """
+        adding user
+        """
         new_user = User(
                 email='email',
                 hashed_password='hashed_password',
@@ -40,17 +45,29 @@ class DB:
                 )
         self._session.add(new_user)
         self._session.commit()
+
         return new_user
+
     def find_user_by(self, **kwargs) ->User:
         if not kwargs:
             raise ValueError("no keyword argumnet")
         try:
-            query = self._session.query(User).filter_by(**kwargs)
-            user = query.first()
+            user = self._session.query(User).filter_by(**kwargs).first()
+
             if user is None:
-                raise sqlalchemy.orm.exc.NoResultFound("invalid")
+                raise NoResultFound("invalid")
             return user
+
         except InvalidRequestError as e:
             raise InvalidRequestError(f"Invalid query arguments: {e}")
+
+    def update_user(self, user_id:int, *kwargs) ->None:
+        if not kwargs:
+            raise ValueError("No attributes provided to update")
+
+        try:
+            find = self.find_user_by(id=user_id)
+
+            
 
 
