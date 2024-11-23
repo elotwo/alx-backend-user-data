@@ -22,15 +22,15 @@ class User(Base):
         """
         instance
         """
-        return "<User(
-        email='%s',
-        hashed_password='%s',
-        session_id='%s',
-        reset_token='%s'
-        )>"
-        % (
-            self.email,
-            self.hashed_password,
-            self.session_id,
-            self.reset_token
-            )
+        return (
+                f"<User(email='%s',"
+                f"hashed_password='%s',"
+                f"session_id='%s',"
+                f"reset_token='%s')>"
+                % (
+                    self.email,
+                    self.hashed_password,
+                    self.session_id,
+                    self.reset_token
+                    )
+                )
