@@ -35,3 +35,4 @@ class Auth:
         """ Method to get user from request.
         """
         return None
+        
